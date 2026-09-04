@@ -3,6 +3,7 @@
 //
 
 #include <iostream> // std::cout
+#include <algorithm> // std::find
 #include <unistd.h> // for close(), read()
 
 #include "BootstrapApp.h"
@@ -40,6 +41,11 @@ void process_main(Config& config) {
             break;
         }
     }
+}
+
+bool has_vocab_key(const Config& config, const char* str) {
+    auto it = std::find(config.vocab_order.begin(), config.vocab_order.end(), str);
+    return it != config.vocab_order.end();
 }
 
 void process_byte(uint8_t byte, Config& config)
@@ -86,13 +92,19 @@ void process_byte(uint8_t byte, Config& config)
 
         // Единственная команда, которую обрабатываем (ее может не быть в словаре!)
         // @todo - вынести в отдельный обработчик, если будут добавляться другие команды (S-registers, ATV итд)
+        // если команды есть в словаре, то берем ответ из нее, иначе - хардкод
         if (current_command == "ATE0" || current_command == "ATE") {
             config.echo_input = false;
-            forced_response_text = true;
+            if (!(has_vocab_key(config, "ATE") && has_vocab_key(config, "ATE0"))) {
+                forced_response_text = true;
+            }
         }
         if (current_command == "ATE1") {
             config.echo_input = true;
-            forced_response_text = true;
+            // если команда есть в словаре, то берем ответ из нее, иначе - хардкод
+            if (!has_vocab_key(config, "ATE1")) {
+                forced_response_text = true;
+            }
         }
 
         last_command = current_command;
