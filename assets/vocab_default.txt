@@ -1,0 +1,24 @@
+atR3\r=OK
+
+# the most greediest command!
+#AT*\r=NOT OKEY!
+
+AT+CMD=?\r=Testing
+AT+CMD?\r=Reading
+AT+CMD\r=Execute\rExecute2\rExecute3
+AT+CMD=1234\r=Writing
+AT+CMDA=1234,"set_param"\r=Another writing
+
+AT\r=OK
+ATI\r=Cyberdyne Systems Inc
+AT+COPS=1,0,"MegaFon"\r=+COPS: 0,0,"Beeline"
+AT+CPIN?\r=+CPIN: READY\r\n\r\nOK
+ATV0\r=OK
+ATV5\r=ERROR
+
+ATS3=5\r=S3=5: OK
+
+ATD999*\r=NUMBER 999*\r\nOK
+ATD*\r=NUMBER any\r\nOK
+
+# end of dictionary
